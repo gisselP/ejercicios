@@ -26,6 +26,7 @@
 .header{
   height:70px;
   box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.25);
+  z-index:20;
   @apply bg-black flex flex-row justify-between items-center px-8 fixed top-0 w-full md:px-14 z-10;
 }
 button{
