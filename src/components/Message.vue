@@ -1,5 +1,5 @@
 <script setup>
-import {ref,onMounted,computed} from 'vue'
+import {ref,onMounted,computed,reactive} from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import Gtext from '@/components/Gtext.vue'
@@ -32,6 +32,7 @@ const v$ = useVuelidate(rules, {publicacion} )
 const agregarMensaje = () =>{
   publicaciones.value.push(publicacion.value)
   emit('enviar-item',publicaciones.value)
+  
   localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
   publicacion.value={
      usuario:'',
@@ -40,7 +41,6 @@ const agregarMensaje = () =>{
 }
 onMounted(() => {
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
-
 })
 </script>
 
@@ -54,7 +54,6 @@ onMounted(() => {
         type="text"
         placeholder="Escribe aquí"
         :error-messages="usuarioError"
-        isRequired
         @input="v$.publicacion.usuario.$touch()"
       />
       <p class="mt-2">Añadir descripción</p>

@@ -2,7 +2,10 @@
 import { ref,onMounted } from 'vue'
 
 const props = defineProps({
-  publicaciones: { type: String, default: false },
+  publicaciones: { 
+    type: Array,
+    default: () => [], 
+  },
 })
 /* const comentario=ref({
   mensaje:''
@@ -50,7 +53,7 @@ const props = defineProps({
           </div>
   
         </section>
-        <section  v-for="i in comentarios" :key="i" class="mt-4 avatar">
+        <section  v-for="i in 1" :key="i" class="mt-4 avatar">
           <div class="mx-auto ">
               <img src="../assets/profile.png" alt="" class="rounded-full h-9">
           </div>

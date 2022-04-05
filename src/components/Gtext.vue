@@ -9,7 +9,6 @@ const props = defineProps({
     type: String,
     default: 'text',
   },
-  isRequired: Boolean,
   errorMessages: {
     type: Array,
     default: () => [],
@@ -41,8 +40,7 @@ const getErrorMessage = computed(() =>
   <section>
     <input
       v-model="internalValue" 
-      :type="text" 
-      :required="isRequired"
+      :type="type" 
       :placeholder ="placeholder" 
       class="textfield"
       :class="{

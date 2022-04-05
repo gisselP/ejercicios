@@ -9,14 +9,15 @@ import { ref,onMounted } from 'vue'
 
 const publicaciones=ref([])
 
+const variableRecibida = (item) => {
+  publicaciones.value = item
+}
+
 onMounted(() => {
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
-  console.log(publicaciones.value,7)
 })
 
-const variableRecibida=(ele)=>{
-  publicaciones.value =ele
-}
+
 </script>
 <template>
   <Navbar />
