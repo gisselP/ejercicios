@@ -10,6 +10,7 @@ const props = defineProps({
  const agregarComentario=()=>{
    props.publicaciones.map(item=>console.log(item))
  } */
+
 </script>
 <template>
   <section  class="flex flex-col gap-4 mt-10">
