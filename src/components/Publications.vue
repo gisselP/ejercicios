@@ -1,5 +1,21 @@
 <script setup>
 import { ref,onMounted } from 'vue'
+import Gtext from '@/components/Gtext.vue'
+import useVuelidate from '@vuelidate/core'
+import { required } from '@vuelidate/validators'
+
+import TimeAgo from 'javascript-time-ago'
+import es from 'javascript-time-ago/locale/es.json'
+
+TimeAgo.addLocale(es)
+
+TimeAgo.setDefaultLocale('es')
+
+const timeAgo = new TimeAgo()
+const comentarioUsuario= ref({
+  comentario:''
+})
+const publicaciones=ref([])
 
 const props = defineProps({
   publicaciones: { 
@@ -7,13 +23,20 @@ const props = defineProps({
     default: () => [], 
   },
 })
-/* const comentario=ref({
-  mensaje:''
-})
- const agregarComentario=()=>{
-   props.publicaciones.map(item=>console.log(item))
- } */
 
+
+onMounted(() => {
+  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
+})
+
+const agregarComentario = (id) =>{
+  console.log(id)
+  const publicacion = publicaciones.value.find((item)=>item.id=== id)
+  // localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
+  publicacion.comentarios.push(comentarioUsuario.value)
+  console.log(publicacion)
+  publicaciones.value.map((item)=>console.log(item.comentarios,34))
+}
 </script>
 <template>
   <section  class="flex flex-col gap-4 mt-10">
@@ -21,7 +44,7 @@ const props = defineProps({
       <input type="search" name="" class="search" placeholder="¡Hola, Camila! ¿qué publicación o perfil estás buscando?">
       <img src="../assets/buscar.svg" class="absolute pl-4 bg-white top-3 right-5">
     </div>
-    <section v-for="({usuario,mensaje},index) of props.publicaciones" :key="index" >
+    <section v-for="({usuario,mensaje,id},index) of props.publicaciones" :key="index" >
       <section  class="p-4 bg-white rounded-xl">
         <header class="avatar">
             <div class="mx-auto ">
@@ -29,7 +52,7 @@ const props = defineProps({
             </div>
             <div class="grid grid-rows-2 justify-items-start items center">
                 <h1 class="text-sm font-bold text-black capitalize">{{usuario}}</h1>
-                <p class="text-xs font-bold">• Hace 20 minutos</p>
+                <p class="text-xs font-bold">{{ timeAgo.format(Date.now() - 60 * 1000)}}</p>
             </div>
         </header>
         <p class="py-3 text-sm font-medium text-black">{{mensaje}}</p>
@@ -47,9 +70,14 @@ const props = defineProps({
           <div class="mx-auto ">
               <img src="../assets/profile.png" alt="" class="rounded-full h-9">
           </div>
-          <div class="flex ">
-            <input type="text"   placeholder ="Escribe un comentario" class="w-full p-2 px-3 text-sm font-semibold text-black bg-neutral-100 rounded-l-xl"> 
-            <button type="submit" @click="agregarComentario" class="p-2 px-3 rounded-r-xl bg-neutral-100" ><img src="../assets/enviar.svg" alt="" class="h-4"></button>
+          <div class="relative">
+            <Gtext
+              v-model="comentarioUsuario.comentario"
+              type="text"
+              placeholder="Escribe un comentario"
+              class=""
+            />
+            <button type="submit" @click="agregarComentario(id)" class="absolute top-0 right-0 p-2 rounded-r-xl bg-neutral-100" ><img src="../assets/enviar.svg" alt="" class="h-4"></button>
           </div>
   
         </section>
@@ -57,7 +85,7 @@ const props = defineProps({
           <div class="mx-auto ">
               <img src="../assets/profile.png" alt="" class="rounded-full h-9">
           </div>
-          <p class="p-2 px-3 text-sm font-semibold text-black">{{}}</p>
+          <p class="p-2 px-3 text-sm font-semibold text-black">{{comentarioUsuario.comentario}}</p>
         </section>
       </section>
     </section>

@@ -5,10 +5,6 @@ import { required } from '@vuelidate/validators'
 
 const props = defineProps({
   modelValue: [String, Number, Object],
-  type:{
-    type: String,
-    default: 'text',
-  },
   errorMessages: {
     type: Array,
     default: () => [],
@@ -25,8 +21,6 @@ const internalValue = computed({
   set: (value) => emit('update:modelValue', value),
 })
 
-
-
 const getErrorMessage = computed(() =>
  props.errorMessages.length > 0 ? props.errorMessages[0] : ''
 )
@@ -34,32 +28,31 @@ const getErrorMessage = computed(() =>
 </script>
 <template>
   <section>
-    <input
+    <textarea
       v-model="internalValue" 
-      :type="type" 
       :placeholder ="placeholder" 
-      class="textfield"
+      class="textarea"
       :class="{
-        'textfield-error': getErrorMessage,
+        'textarea-error': getErrorMessage,
       }"
-    >
+    ></textarea>
     <p v-if="getErrorMessage" class="error"  >
       {{getErrorMessage}}
     </p>
   </section>
 </template>
 <style  lang="postcss" scoped>
-.textfield{
+.textarea{
   outline: none;
-  @apply w-full px-4 py-2 text-sm font-medium bg-neutral-100 rounded-xl;
+  @apply outline-0 text-sm border-0 bg-neutral-100 rounded-xl resize-none font-bold px-4 py-2 h-32 w-full;
 }
-.textfield::placeholder {
-  @apply text-sm font-medium;
+.textarea::placeholder {
+  @apply text-sm font-light;
 }
 .error{
-  @apply text-red-700	text-xs font-medium;
+  @apply text-red-700 text-xs;
 }
-.textfield-error{
+.textarea-error{
   @apply border-red-700 border-2;
 }
 </style>
