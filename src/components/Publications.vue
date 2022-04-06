@@ -12,10 +12,12 @@ TimeAgo.addLocale(es)
 TimeAgo.setDefaultLocale('es')
 
 const timeAgo = new TimeAgo()
+const publicaciones = ref([])
+
+const comentariosNuevos = ref([])
 const comentarioUsuario= ref({
   comentario:''
 })
-const publicaciones=ref([])
 
 const props = defineProps({
   publicaciones: { 
@@ -30,12 +32,14 @@ onMounted(() => {
 })
 
 const agregarComentario = (id) =>{
-  console.log(id)
-  const publicacion = publicaciones.value.find((item)=>item.id=== id)
+  console.log(id) 
+
+  const {comentarios} = publicaciones.value.find((item)=>item.id=== id)
   // localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
-  publicacion.comentarios.push(comentarioUsuario.value)
-  console.log(publicacion)
-  publicaciones.value.map((item)=>console.log(item.comentarios,34))
+  comentarios.push(comentarioUsuario.value)
+  console.log(comentarios)
+  
+  // publicaciones.value.map((item)=>console.log(item.comentarios,34))
 }
 </script>
 <template>
@@ -71,7 +75,7 @@ const agregarComentario = (id) =>{
               <img src="../assets/profile.png" alt="" class="rounded-full h-9">
           </div>
           <div class="relative">
-            <Gtext
+            <Gtext    
               v-model="comentarioUsuario.comentario"
               type="text"
               placeholder="Escribe un comentario"

@@ -5,6 +5,7 @@ import { required } from '@vuelidate/validators'
 
 const props = defineProps({
   modelValue: [String, Number, Object],
+  id: [String, Number],
   type:{
     type: String,
     default: 'text',
@@ -37,6 +38,7 @@ const getErrorMessage = computed(() =>
     <input
       v-model="internalValue" 
       :type="type" 
+      :id="id"
       :placeholder ="placeholder" 
       class="textfield"
       :class="{
