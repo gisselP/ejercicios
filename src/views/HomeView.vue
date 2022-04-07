@@ -7,23 +7,22 @@ import Message from '@/components/Message.vue'
 import Footer from '@/components/Footer.vue'
 import { ref,onMounted } from 'vue'
 
-const publicaciones=ref([])
+const actualizar = ref(false)
 
 const variableRecibida = (item) => {
-  publicaciones.value = item
+  actualizar.value = true
+  setTimeout(() => {
+    actualizar.value = false
+  },1000);
+  console.log(actualizar.value)
 }
-
-onMounted(() => {
-  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
-})
-
 
 </script>
 <template>
   <Navbar />
   <main class="home">
     <Sidebar  class="hidden lg:block lg:col-span-2"/>
-    <Publications  :publicaciones="publicaciones" class="md:col-span-6 lg:col-span-5"/>
+    <Publications  :actualizar="actualizar" class="md:col-span-6 lg:col-span-5"/>
     <Message @enviar-item="variableRecibida" class="hidden md:block md:col-span-4 lg:col-span-3"/>
   </main>
   <Footer />

@@ -1,5 +1,5 @@
 <script setup>
-import { ref,onMounted } from 'vue'
+import { ref,onMounted,watch,computed } from 'vue'
 import Gtext from '@/components/Gtext.vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
@@ -12,49 +12,80 @@ TimeAgo.addLocale(es)
 TimeAgo.setDefaultLocale('es')
 
 const timeAgo = new TimeAgo()
-const publicaciones = ref([])
 
-const comentariosNuevos = ref([])
-const comentarioUsuario= ref({
-  comentario:''
-})
+const publicaciones = ref([])
+const comentarioUsuario = ref('')
 
 const props = defineProps({
-  publicaciones: { 
-    type: Array,
-    default: () => [], 
+  actualizar: { 
+    type: Boolean,
+    default: false, 
   },
 })
 
-
-onMounted(() => {
-  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
+const rules = computed(() => {
+  return {
+    comentarioUsuario: { required }
+  }
 })
 
-const agregarComentario = (id) =>{
-  console.log(id) 
+const v$ = useVuelidate(rules, { comentarioUsuario } )
 
-  const {comentarios} = publicaciones.value.find((item)=>item.id=== id)
-  // localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
-  comentarios.push(comentarioUsuario.value)
-  console.log(comentarios)
-  
-  // publicaciones.value.map((item)=>console.log(item.comentarios,34))
+
+const listarPublicaciones = () =>{
+  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'))
 }
+
+const agregarComentario = (id) =>{
+  const { comentarios } = publicaciones.value.find((item)=>item.id=== id)
+  comentarios.unshift({ comentario : comentarioUsuario.value })
+  localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
+  
+  comentarioUsuario.value =''
+  v$.value.$reset()
+}
+
+const validate = (evento,id) =>{
+  try {
+    if (evento.code != 'Enter') return
+    v$.value.$touch()
+    if (v$.value.$invalid) {
+      alert('¿Ey no querías publicar?')
+    } else {
+      agregarComentario(id)
+    }
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+
+watch(
+  () => props.actualizar,
+  (val) => {
+    if(val){
+      listarPublicaciones()
+    }
+  }
+)
+
+onMounted(() => {
+  listarPublicaciones()
+})
 </script>
 <template>
-  <section  class="flex flex-col gap-4 mt-10">
+  <section  class="flex flex-col gap-4 my-10 mb-20">
     <div class="relative">
       <input type="search" name="" class="search" placeholder="¡Hola, Camila! ¿qué publicación o perfil estás buscando?">
       <img src="../assets/buscar.svg" class="absolute pl-4 bg-white top-3 right-5">
     </div>
-    <section v-for="({usuario,mensaje,id},index) of props.publicaciones" :key="index" >
+    <section v-for="({ usuario,mensaje,id,comentarios },index) of publicaciones" :key="index" >
       <section  class="p-4 bg-white rounded-xl">
         <header class="avatar">
             <div class="mx-auto ">
                 <img src="../assets/profile.png" alt="" class="rounded-full h-9">
             </div>
-            <div class="grid grid-rows-2 justify-items-start items center">
+            <div class="grid items-center grid-rows-2 justify-items-start">
                 <h1 class="text-sm font-bold text-black capitalize">{{usuario}}</h1>
                 <p class="text-xs font-bold">{{ timeAgo.format(Date.now() - 60 * 1000)}}</p>
             </div>
@@ -74,22 +105,28 @@ const agregarComentario = (id) =>{
           <div class="mx-auto ">
               <img src="../assets/profile.png" alt="" class="rounded-full h-9">
           </div>
-          <div class="relative">
-            <Gtext    
-              v-model="comentarioUsuario.comentario"
+          <form class="relative" @keyup="validate({ code: $event.key },id)" >
+            <Gtext
+              v-model="comentarioUsuario"
               type="text"
               placeholder="Escribe un comentario"
-              class=""
+              @input="v$.comentarioUsuario.$touch()"
             />
-            <button type="submit" @click="agregarComentario(id)" class="absolute top-0 right-0 p-2 rounded-r-xl bg-neutral-100" ><img src="../assets/enviar.svg" alt="" class="h-4"></button>
-          </div>
+            <button type="submit" class="btn" @click="validate({ code: 'Enter' },id)" ><img src="../assets/enviar.svg" alt="" class="h-4"></button>
+          </form>
   
         </section>
-        <section  v-for="i in 1" :key="i" class="mt-4 avatar">
-          <div class="mx-auto ">
+        <section  v-for="({ comentario },index) in comentarios" :key="index" class="mt-4 avatar">
+          <div class="pt-1 mx-auto">
               <img src="../assets/profile.png" alt="" class="rounded-full h-9">
           </div>
-          <p class="p-2 px-3 text-sm font-semibold text-black">{{comentarioUsuario.comentario}}</p>
+          <div class="flex flex-col pr-2 ">
+            <div>
+              <h1 class="inline-block text-sm font-semibold text-black capitalize">{{usuario}}</h1>
+              <span class="ml-4 text-xs font-semibold ">{{ timeAgo.format(Date.now() - 60 * 1000)}}</span>
+            </div>  
+            <p class="text-sm font-semibold text-black ">{{comentario}}</p>
+          </div>
         </section>
       </section>
     </section>
@@ -104,7 +141,7 @@ const agregarComentario = (id) =>{
 .avatar{
   display: grid;
   grid-template-columns: 40px 1fr;
-  @apply items-center justify-center gap-2;
+  @apply  justify-center gap-2;
 }
 .reacciones{
   @apply grid grid-cols-2 py-1 text-sm border-y-2;
@@ -112,7 +149,10 @@ const agregarComentario = (id) =>{
 .reacciones > p{
   @apply flex items-center justify-center gap-2 py-1 font-bold rounded-md cursor-pointer hover:bg-neutral-100;
 }
-
+.btn{
+  top:2.2px;
+  @apply absolute right-1 p-2 rounded-r-xl bg-neutral-100;
+}
 </style>
 
 

@@ -12,7 +12,7 @@ const publicacion = ref({
   usuario:'',
   mensaje:'',
   comentarios:[],
-  id:'2'
+  id:''
 })
 
 const rules = computed(() => {
@@ -41,7 +41,14 @@ const mensajeError = computed(() => {
 
 
 const agregarMensaje = () =>{
-  publicaciones.value.push(publicacion.value)
+  publicacion.value.id = publicaciones.value.length
+  console.log(publicacion.value)
+  publicaciones.value.unshift({
+    usuario: publicacion.value.usuario,
+    mensaje: publicacion.value.mensaje,
+    comentarios: [],
+    id:publicacion.value.id
+  })
   emit('enviar-item',publicaciones.value)
   
   localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
