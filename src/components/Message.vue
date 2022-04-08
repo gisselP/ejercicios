@@ -42,15 +42,14 @@ const mensajeError = computed(() => {
 
 const agregarMensaje = () =>{
   publicacion.value.id = publicaciones.value.length
-  console.log(publicacion.value)
   publicaciones.value.unshift({
     usuario: publicacion.value.usuario,
     mensaje: publicacion.value.mensaje,
-    comentarios: [],
+    comentarios: publicacion.value.comentarios,
     id:publicacion.value.id
   })
   emit('enviar-item',publicaciones.value)
-  
+
   localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
   publicacion.value={
      usuario:'',
@@ -74,6 +73,7 @@ const validate = () =>{
 
 onMounted(() => {
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
+  console.log(publicaciones.value)
 })
 
 </script>

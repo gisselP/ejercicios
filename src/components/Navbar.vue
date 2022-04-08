@@ -33,7 +33,7 @@ button{
     background: #F47647;
 }
 .sae-container{
-  @apply hidden absolute bottom-6 right-6 md:flex justify-between md:items-center mb-2 gap-4 z-10;
+  @apply hidden absolute bottom-6 right-6 md:flex justify-between md:items-center mb-2 gap-4 ;
 }
 </style>
 

@@ -53,7 +53,7 @@ const getErrorMessage = computed(() =>
 <style  lang="postcss" scoped>
 .textfield{
   outline: none;
-  @apply w-full px-4 py-2 text-sm font-medium bg-neutral-100 rounded-xl;
+  @apply w-full px-3 py-2 text-sm font-medium bg-neutral-100 rounded-xl;
 }
 .textfield::placeholder {
   @apply text-sm font-medium;

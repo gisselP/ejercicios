@@ -13,8 +13,8 @@ const variableRecibida = (item) => {
   actualizar.value = true
   setTimeout(() => {
     actualizar.value = false
-  },1000);
-  console.log(actualizar.value)
+  },500);
+  console.log(item)
 }
 
 </script>
