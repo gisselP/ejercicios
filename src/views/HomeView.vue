@@ -22,7 +22,7 @@ const variableRecibida = (item) => {
   <Navbar />
   <main class="home">
     <Sidebar  class="hidden lg:block lg:col-span-2"/>
-    <Publications  :actualizar="actualizar" class="md:col-span-6 lg:col-span-5"/>
+    <Publications  :actualizarPublicacion="actualizar" class="md:col-span-6 lg:col-span-5"/>
     <Message @enviar-item="variableRecibida" class="hidden md:block md:col-span-4 lg:col-span-3"/>
   </main>
   <Footer />

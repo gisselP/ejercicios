@@ -10,7 +10,7 @@ const emit = defineEmits(['enviar-item'])
 
 const props = defineProps({
   id: { type: Number, default: null},
-  actualizar: { 
+  actualizarComentario: { 
     type: Boolean,
     default: false, 
   },
@@ -52,7 +52,7 @@ const validate = (evento) =>{
 }
 
 watch(
-  () => props.actualizar,
+  () => props.actualizarComentario,
   (val) => {
     if(val){
       listarPublicaciones()

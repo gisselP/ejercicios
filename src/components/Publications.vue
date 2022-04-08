@@ -18,7 +18,7 @@ const comentarioUsuario = ref('')
 const actualizar = ref(false)
 
 const props = defineProps({
-  actualizar: { 
+  actualizarPublicacion: { 
     type: Boolean,
     default: false, 
   },
@@ -34,7 +34,7 @@ const listarPublicaciones = (item) =>{
 }
 
 watch(
-  () => props.actualizar,
+  () => props.actualizarPublicacion,
   (val) => {
     if(val){
       listarPublicaciones()
@@ -76,7 +76,7 @@ onMounted(() => {
         </section>
         <Comentario
           @enviar-item="listarPublicaciones"
-          :actualizar="props.actualizar"
+          :actualizarComentario="actualizar"
           :id="id"
         />
 
