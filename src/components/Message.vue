@@ -4,7 +4,10 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import Gtextarea from '@/components/Gtextarea.vue'
 import Gtext from '@/components/Gtext.vue'
+import { useStore } from 'vuex'
 
+
+const store = useStore()
 
 const emit = defineEmits(['publicaciones'])
 const publicaciones = ref([])
@@ -41,6 +44,8 @@ const mensajeError = computed(() => {
 })
 
 const agregarMensaje = () =>{
+
+  store.commit('user/actualizarUsuario', publicacion.value.usuario)
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
   
   publicacion.value.id = publicaciones.value.length

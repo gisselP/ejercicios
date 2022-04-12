@@ -15,6 +15,9 @@ const store = useStore()
 
 const timeAgo = new TimeAgo()
 
+const usuarioActual = computed(() => store.state['user'].userLog)
+const listaUsuarios = computed(() => store.state['user'].usuarios)
+
 const publicaciones = ref([])
 const likesPublicacion = ref()
 const actualizar = ref(false)
@@ -63,6 +66,12 @@ onMounted(() => {
       <input type="search" name="" class="search" placeholder="¡Hola, Camila! ¿qué publicación o perfil estás buscando?">
       <img src="../assets/buscar.svg" class="absolute pl-4 bg-white top-3 right-5">
     </div>
+            <br>
+        <br>
+        {{usuarioActual}}
+        <br>
+        <br>
+        {{listaUsuarios}}
     <template v-if = "publicaciones.length === 0">
       <div class="p-4 text-sm font-bold text-center bg-white rounded-md">
         No se encontraron publicaciones
