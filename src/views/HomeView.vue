@@ -9,12 +9,11 @@ import { ref,onMounted } from 'vue'
 
 const actualizar = ref(false)
 
-const variableRecibida = (item) => {
+const variableRecibida = () => {
   actualizar.value = true
   setTimeout(() => {
     actualizar.value = false
   },500);
-  console.log(item)
 }
 
 </script>
@@ -22,15 +21,16 @@ const variableRecibida = (item) => {
   <Navbar />
   <main class="home">
     <Sidebar  class="hidden lg:block lg:col-span-2"/>
-    <Publications  :actualizarPublicacion="actualizar" class="md:col-span-6 lg:col-span-5"/>
-    <Message @enviar-item="variableRecibida" class="hidden md:block md:col-span-4 lg:col-span-3"/>
+    <Publications  :actualizarPublicacion="actualizar" class="h-full md:col-span-6 lg:col-span-5"/>
+    <Message @publicaciones="variableRecibida" class="hidden md:block md:col-span-4 lg:col-span-3"/>
   </main>
   <Footer />
 </template>
 <style lang="postcss" scoped>
 .home{
   margin-top:70px;
-  @apply grid md:grid-cols-10 h-full gap-10 mx-14 md:mx-10 ;
+ 
+  @apply grid md:grid-cols-10  gap-10 mx-14 md:mx-10 ;
 }
 </style>
 

@@ -11,7 +11,10 @@
   -moz-osx-font-smoothing: grayscale;
   color: #7F8794;
   background: #E5E5E5;
-  @apply font-montserrat;
+  @apply font-montserrat ;
+}
+body{
+  background: #E5E5E5;
 }
 button{
     background: #F47647;

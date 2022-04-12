@@ -44,10 +44,10 @@ const getErrorMessage = computed(() =>
 <style  lang="postcss" scoped>
 .textarea{
   outline: none;
-  @apply outline-0 text-sm border-0 bg-neutral-100 rounded-xl resize-none font-bold px-4 py-2 h-32 w-full;
+  @apply outline-0 text-sm border-0 bg-neutral-100 rounded-xl resize-none font-medium px-4 py-2 h-32 w-full;
 }
 .textarea::placeholder {
-  @apply text-sm font-light;
+  @apply text-sm font-medium;
 }
 .error{
   @apply text-red-700 text-xs;

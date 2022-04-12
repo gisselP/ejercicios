@@ -6,13 +6,14 @@ import Gtextarea from '@/components/Gtextarea.vue'
 import Gtext from '@/components/Gtext.vue'
 
 
-const emit = defineEmits(['enviar-item'])
+const emit = defineEmits(['publicaciones'])
 const publicaciones = ref([])
 const publicacion = ref({
   usuario:'',
   mensaje:'',
   comentarios:[],
-  id:''
+  id:'',
+  likes:[]
 })
 
 const rules = computed(() => {
@@ -39,21 +40,26 @@ const mensajeError = computed(() => {
   return error
 })
 
-
 const agregarMensaje = () =>{
+  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
+  
   publicacion.value.id = publicaciones.value.length
   publicaciones.value.unshift({
     usuario: publicacion.value.usuario,
     mensaje: publicacion.value.mensaje,
     comentarios: publicacion.value.comentarios,
-    id:publicacion.value.id
+    id:publicacion.value.id,
+    likes: publicacion.value.likes
   })
-  emit('enviar-item',publicaciones.value)
+  emit('publicaciones')
 
   localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
   publicacion.value={
      usuario:'',
-     mensaje:''
+     mensaje:'',
+     comentarios:[],
+     id:null,
+     likes:[]
   }
   v$.value.$reset()
 }
@@ -73,14 +79,12 @@ const validate = () =>{
 
 onMounted(() => {
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
-  console.log(publicaciones.value)
 })
 
 </script>
-
 <template>
-  <section  class="flex flex-col gap-2 mt-10 ">
-    <form class="p-4 text-sm bg-white rounded-2xl font-poppins" @submit.prevent="validate">
+  <section  class="flex flex-col h-full gap-2 mt-10 ">
+    <form class="p-4 text-sm font-semibold bg-white rounded-2xl " @submit.prevent="validate">
       <h1 class="pb-4 text-lg font-bold">Mensaje para los colaboradores</h1>
       <p class="mb-2">Usuario</p>
       <Gtext

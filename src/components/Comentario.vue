@@ -13,7 +13,7 @@ const props = defineProps({
   actualizarComentario: { 
     type: Boolean,
     default: false, 
-  },
+  }
 })
 
 const rules = computed(() => {
@@ -30,16 +30,15 @@ const listarPublicaciones = () =>{
 const agregarComentario = () =>{
   const { comentarios } = publicaciones.value.find((item)=>item.id=== props.id)
   comentarios.unshift({ comentario : comentarioUsuario.value })
- 
-  emit('enviar-item', publicaciones.value)
+  emit('enviar-item')
+  
   localStorage.setItem('publicaciones',JSON.stringify(publicaciones.value))
   comentarioUsuario.value =''
-  v$.value.$reset()
+  v$.value.$reset() 
 }
 
-const validate = (evento) =>{
+const validate = () =>{
   try {
-    if (evento.code != 'Enter') return
     v$.value.$touch()
     if (v$.value.$invalid) {
       alert('¿Ey no querías publicar?')
@@ -51,15 +50,6 @@ const validate = (evento) =>{
   }
 }
 
-watch(
-  () => props.actualizarComentario,
-  (val) => {
-    if(val){
-      listarPublicaciones()
-    }
-  }
-)
-
 onMounted(() => {
   listarPublicaciones()
 })
@@ -70,14 +60,14 @@ onMounted(() => {
     <div class="mx-auto ">
       <img src="../assets/profile.png" alt="" class="rounded-full h-9">
     </div>
-      <form class="relative" @keyup="validate({ code: $event.key })" >
+      <form class="relative" @submit.prevent="validate" >
         <Gtext
           v-model="comentarioUsuario"
           type="text"
           placeholder="Escribe un comentario"
           @input="v$.comentarioUsuario.$touch()"
         />
-        <button type="submit" class="btn" @click="validate({ code: 'Enter' })" ><img src="../assets/enviar.svg" alt="" class="h-4"></button>
+        <button type="submit" class="btn" ><img src="../assets/enviar.svg" alt="" class="h-4"></button>
       </form>
   </section>
 </template>
