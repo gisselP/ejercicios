@@ -1,17 +1,21 @@
 <script setup>
 import { ref,onMounted,watch,computed } from 'vue'
-import Gtext from '@/components/Gtext.vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
-import Comentario from '@/components/Comentario.vue'
 import TimeAgo from 'javascript-time-ago'
 import es from 'javascript-time-ago/locale/es.json'
+
+import Comentario from '@/components/Comentario.vue'
+import Gtext from '@/components/Gtext.vue'
+
 import { useStore } from 'vuex'
 
 TimeAgo.addLocale(es)
-
 TimeAgo.setDefaultLocale('es')
+
+
 const store = useStore()
+const userName = computed(() => store.state['user'].userLog)
 
 const timeAgo = new TimeAgo()
 
@@ -64,6 +68,7 @@ onMounted(() => {
       <img src="../assets/buscar.svg" class="absolute pl-4 bg-white top-3 right-5">
     </div>
     <template v-if = "publicaciones.length === 0">
+      {{userName}}
       <div class="p-4 text-sm font-bold text-center bg-white rounded-md">
         No se encontraron publicaciones
       </div>
