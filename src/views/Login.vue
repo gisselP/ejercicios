@@ -27,10 +27,19 @@ const usuarioError = computed(() => {
   return error
 })
 
-const agregarUsuario = () =>{
-  console.log(usuario)
-  router.push({ name: 'home' })
-  localStorage.setItem('usuarios',JSON.stringify(usuario.value))
+const agregarUsuario = async () =>{
+  try {
+    const { ok, message } = await store.dispatch('user/login', { username: usuario.value })
+    if (!ok) {
+      console.log(message)
+    } else {
+      router.push({ name: 'home' })
+    }
+    alert (message)
+  } catch (err) {
+    console.log(err)
+  }
+  // localStorage.setItem('usuarios',JSON.stringify(usuario.value))
 }
 
 const validate = () =>{

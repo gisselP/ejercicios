@@ -1,26 +1,15 @@
-import { http } from '@hooks/shared'
-import { USER_TYPES } from '@shared/constants'
 
-export const profileService = async ({ commit, rootGetters }) => {
-  const userTypeNumber = rootGetters['auth/getAuthData']('userType')
-  const userType = USER_TYPES[userTypeNumber - 1]
 
+
+export const login = async ({ commit, state }, data) => {
   try {
-    const { data } = await http.get(`perfil/${userType}/datospersonales`)
-    commit('profileInfo', data.results)
-    return { ok: true, message: data.messagePublic }
-  } catch (error) {
-    return { ok: false, message: 'Error sin mensaje' }
-  }
-}
-
-// http://localhost:56386/api/v3/usuario/permisos
-export const permissionsService = async ({ commit }) => {
-  try {
-    const { data } = await http.get('usuario/permisos')
-    commit('updatePermissions', data.results)
-
-    return { ok: true, message: data.messagePublic }
+    // aqui crear la logica para consultar si existe el usuario en tu lista de usuario
+   
+    const usuario = state.usuarios.find ((element) => element.username === data.username)
+    if( !usuario ) return { ok: false, message: 'El usuario no existe' }
+    commit('actualizarUsuario', usuario)
+    
+    return { ok: true, message: `Bienvenido ${usuario.displayName}`,  }
   } catch (error) {
     return { ok: false, message: 'Error sin mensaje' }
   }

@@ -7,17 +7,16 @@ import es from 'javascript-time-ago/locale/es.json'
 
 import Comentario from '@/components/Comentario.vue'
 import Gtext from '@/components/Gtext.vue'
-
 import { useStore } from 'vuex'
 
 TimeAgo.addLocale(es)
 TimeAgo.setDefaultLocale('es')
 
-
-const store = useStore()
-const userName = computed(() => store.state['user'].userLog)
-
 const timeAgo = new TimeAgo()
+const store = useStore()
+
+const usuarioActual = computed(() => store.state['user'].userLog)
+const listaUsuarios = computed(() => store.state['user'].usuarios)
 
 const publicaciones = ref([])
 const likesPublicacion = ref()
@@ -63,19 +62,21 @@ onMounted(() => {
 </script>
 <template>
   <section  class="flex flex-col gap-4 my-10 mb-20">
-    <div class="relative">
+    <div class="relative mx-4 lg:mx-0">
       <input type="search" name="" class="search" placeholder="¡Hola, Camila! ¿qué publicación o perfil estás buscando?">
       <img src="../assets/buscar.svg" class="absolute pl-4 bg-white top-3 right-5">
     </div>
+        {{usuarioActual}}
+----------------------------
+        {{listaUsuarios}}
     <template v-if = "publicaciones.length === 0">
-      {{userName}}
       <div class="p-4 text-sm font-bold text-center bg-white rounded-md">
         No se encontraron publicaciones
       </div>
     </template>
     <template v-else>
       <section v-for="({ usuario,mensaje,id,comentarios,likes },index) of publicaciones" :key="index" >
-        <section  class="p-4 bg-white rounded-xl">
+        <section  class="p-4 bg-white sm:mx-4 sm:rounded-xl lg:mx-0">
           <header class="avatar">
               <div class="mx-auto ">
                   <img src="../assets/profile.png" alt="" class="rounded-full h-9">

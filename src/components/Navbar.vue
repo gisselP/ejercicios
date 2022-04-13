@@ -1,16 +1,33 @@
-<script>
+<script setup>
+import {ref,onMounted,computed,reactive} from 'vue'
+import { useStore } from 'vuex'
+const store = useStore()
+const usuario = ref('')
 
+const usuarioActual = computed(() => store.state['user'].userLog)
+const usuarios = computed(() => store.state['user'].usuarios)
+
+const findUsuario = () =>{
+  const { displayName } = usuarios.value.find(item=> item.displayName === usuarioActual.value.displayName)
+  usuario.value = displayName
+  console.log(usuario.value)
+}
+
+onMounted(() => {
+  findUsuario()
+})
 </script>
 <template>
   <header class="header">
-    <div class="flex justify-center gap-5">
+    <div class="flex justify-center gap-5" @click="nombre">
       <img src="../assets/logo.svg" alt="" class="h-8">
     </div>
     <div class="flex flex-row items-center gap-10">  
       <img src="../assets/carta.svg">
       <img src="../assets/campana.svg">
       <img  class="w-14 md:hidden" src="../assets/sae.svg">
-      <h1 class="hidden text-lg font-bold text-white md:flex md:items-center md:gap-4">Camila CG
+      <h1 class="hidden text-lg font-bold text-white md:flex md:items-center md:gap-4">
+        {{usuario}}
         <img src="../assets/profile.png" alt="" class="rounded-full h-9">
       </h1>
     </div>

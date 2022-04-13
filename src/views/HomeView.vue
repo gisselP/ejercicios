@@ -30,7 +30,7 @@ const variableRecibida = () => {
 .home{
   margin-top:70px;
  
-  @apply grid md:grid-cols-10  gap-10 mx-14 md:mx-10 ;
+  @apply grid md:grid-cols-10  gap-10 md:mx-10 ;
 }
 </style>
 

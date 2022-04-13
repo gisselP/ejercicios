@@ -1,4 +1,4 @@
-import { createStore, createLogger } from 'vuex'
+import { createStore } from 'vuex'
 import userStore from './user'
 
 const store = createStore({

@@ -4,7 +4,10 @@ import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import Gtextarea from '@/components/Gtextarea.vue'
 import Gtext from '@/components/Gtext.vue'
+import { useStore } from 'vuex'
 
+
+const store = useStore()
 
 const emit = defineEmits(['publicaciones'])
 const publicaciones = ref([])
@@ -41,6 +44,8 @@ const mensajeError = computed(() => {
 })
 
 const agregarMensaje = () =>{
+
+  store.commit('user/actualizarUsuario', publicacion.value.usuario)
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
   
   publicacion.value.id = publicaciones.value.length
@@ -83,7 +88,7 @@ onMounted(() => {
 
 </script>
 <template>
-  <section  class="flex flex-col h-full gap-2 mt-10 ">
+  <section  class="flex flex-col justify-end h-full gap-2 mt-10 md:justify-start ">
     <form class="p-4 text-sm font-semibold bg-white rounded-2xl " @submit.prevent="validate">
       <h1 class="pb-4 text-lg font-bold">Mensaje para los colaboradores</h1>
       <p class="mb-2">Usuario</p>

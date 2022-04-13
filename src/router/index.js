@@ -5,13 +5,13 @@ import Login from '../views/Login.vue'
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomeView
-  },
-  {
-    path: '/login',
     name: 'login',
     component: Login
+  },
+  {
+    path: '/home',
+    name: 'home',
+    component: HomeView
   },
   {
     path: '/:pathMatch(.*)*',
