@@ -39,7 +39,7 @@ const agregarLikes = (id) =>{
 }
 
 const listarPublicaciones = (item) =>{
-   actualizar.value = true
+  actualizar.value = true
   setTimeout(() => {
     publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'))
     actualizar.value = false
@@ -66,9 +66,6 @@ onMounted(() => {
       <input type="search" name="" class="search" placeholder="¡Hola, Camila! ¿qué publicación o perfil estás buscando?">
       <img src="../assets/buscar.svg" class="absolute pl-4 bg-white top-3 right-5">
     </div>
-        {{usuarioActual}}
-----------------------------
-        {{listaUsuarios}}
     <template v-if = "publicaciones.length === 0">
       <div class="p-4 text-sm font-bold text-center bg-white rounded-md">
         No se encontraron publicaciones

@@ -1,15 +1,15 @@
 <script setup>
-import {ref,onMounted,computed,reactive} from 'vue'
+import { ref,onMounted,computed,reactive } from 'vue'
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import Gtextarea from '@/components/Gtextarea.vue'
 import Gtext from '@/components/Gtext.vue'
 import { useStore } from 'vuex'
 
-
 const store = useStore()
-
 const emit = defineEmits(['publicaciones'])
+
+const usuario = ref('')
 const publicaciones = ref([])
 const publicacion = ref({
   usuario:'',
@@ -19,10 +19,27 @@ const publicacion = ref({
   likes:[]
 })
 
+/* store.state['user'].userLog ? store.state['user'].userLog : JSON.parse(localStorage.getItem('usuario'))
+ */
+const usuarioActual = computed(() => store.state['user'].userLog)
+const usuarios = computed(() => store.state['user'].usuarios)
+
+const findUsuario = () =>{
+  if(!usuarioActual.value){
+    const usuarioLocal = JSON.parse(localStorage.getItem('usuario'))
+    const { displayName,id } = usuarios.value.find(item=> item.username === usuarioLocal)
+    publicacion.value.usuario = displayName
+    publicacion.value.id = id
+  }else{
+    const { displayName,id } = usuarios.value.find(item=> item.displayName === usuarioActual.value.displayName)
+    publicacion.value.usuario = displayName
+    publicacion.value.id = id
+  }
+}
+
 const rules = computed(() => {
   return {
     publicacion: {
-      usuario: { required },
       mensaje: { required },
     }
   }
@@ -30,12 +47,6 @@ const rules = computed(() => {
 
 const v$ = useVuelidate(rules, {publicacion} )
 
-const usuarioError = computed(() => {
-  let error = []
-  if (!v$.value.publicacion.usuario.$dirty) return error
-  v$.value.publicacion.usuario.required.$invalid && error.push('¡Olvidaste llenar este campo!')
-  return error
-})
 const mensajeError = computed(() => {
   let error = []
   if (!v$.value.publicacion.mensaje.$dirty) return error
@@ -45,10 +56,8 @@ const mensajeError = computed(() => {
 
 const agregarMensaje = () =>{
 
-  store.commit('user/actualizarUsuario', publicacion.value.usuario)
-  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
-  
-  publicacion.value.id = publicaciones.value.length
+  store.commit('user/actualizarMensaje', publicacion.value)  
+  publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'))
   publicaciones.value.unshift({
     usuario: publicacion.value.usuario,
     mensaje: publicacion.value.mensaje,
@@ -83,6 +92,7 @@ const validate = () =>{
 }
 
 onMounted(() => {
+  findUsuario()
   publicaciones.value = JSON.parse(localStorage.getItem('publicaciones'));
 })
 
@@ -91,14 +101,14 @@ onMounted(() => {
   <section  class="flex flex-col justify-end h-full gap-2 mt-10 md:justify-start ">
     <form class="p-4 text-sm font-semibold bg-white rounded-2xl " @submit.prevent="validate">
       <h1 class="pb-4 text-lg font-bold">Mensaje para los colaboradores</h1>
-      <p class="mb-2">Usuario</p>
-      <Gtext
+      <p class="mb-2">Usuario: <span >{{ publicacion.usuario|| 'Anónimo' }}</span></p>
+      <!-- <Gtext
         v-model="publicacion.usuario"
         type="text"
         placeholder="Escribe aquí"
         :error-messages="usuarioError"
         @input="v$.publicacion.usuario.$touch()"
-      />
+      /> -->
       <p class="my-2">Añadir descripción</p>
       <Gtextarea
         v-model="publicacion.mensaje"

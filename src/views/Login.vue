@@ -29,6 +29,7 @@ const usuarioError = computed(() => {
 
 const agregarUsuario = async () =>{
   try {
+    localStorage.setItem('usuario',JSON.stringify(usuario.value))
     const { ok, message } = await store.dispatch('user/login', { username: usuario.value })
     if (!ok) {
       console.log(message)

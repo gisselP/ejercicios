@@ -8,9 +8,14 @@ const usuarioActual = computed(() => store.state['user'].userLog)
 const usuarios = computed(() => store.state['user'].usuarios)
 
 const findUsuario = () =>{
-  const { displayName } = usuarios.value.find(item=> item.displayName === usuarioActual.value.displayName)
-  usuario.value = displayName
-  console.log(usuario.value)
+  if(!usuarioActual.value){
+    const usuarioLocal = JSON.parse(localStorage.getItem('usuario'))
+    const { displayName } = usuarios.value.find(item=> item.username === usuarioLocal)
+    usuario.value = displayName
+  }else{
+    const { displayName } = usuarios.value.find(item=> item.displayName === usuarioActual.value.displayName)
+    usuario.value = displayName
+  }
 }
 
 onMounted(() => {
@@ -27,7 +32,7 @@ onMounted(() => {
       <img src="../assets/campana.svg">
       <img  class="w-14 md:hidden" src="../assets/sae.svg">
       <h1 class="hidden text-lg font-bold text-white md:flex md:items-center md:gap-4">
-        {{usuario}}
+        {{usuario || 'Anónimo' }}
         <img src="../assets/profile.png" alt="" class="rounded-full h-9">
       </h1>
     </div>

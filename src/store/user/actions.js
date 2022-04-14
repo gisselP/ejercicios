@@ -8,7 +8,6 @@ export const login = async ({ commit, state }, data) => {
     const usuario = state.usuarios.find ((element) => element.username === data.username)
     if( !usuario ) return { ok: false, message: 'El usuario no existe' }
     commit('actualizarUsuario', usuario)
-    
     return { ok: true, message: `Bienvenido ${usuario.displayName}`,  }
   } catch (error) {
     return { ok: false, message: 'Error sin mensaje' }
